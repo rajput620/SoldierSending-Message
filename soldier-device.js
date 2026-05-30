@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://localhost:3001/api/soldier';
+const SERVER_URL = 'https://soldiersignup.onrender.com/api/soldier';
 
 document.getElementById('soldier-form').addEventListener('submit', async (event) => {
     event.preventDefault();
