@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soldier Device</title>
+    <link rel="stylesheet" href="soldier-device.css">
+</head>
+<body>
+    <header>
+        <h1>Soldier Device Interface</h1>
+        <p>Simulate and send soldier health, position, environmental, and device status data to the server.</p>
+    </header>
+
+    <main>
+        <form id="soldier-form">
+            <!-- Soldier Information Section -->
+            <fieldset>
+                <legend>Soldier Information</legend>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required><br>
+                <label for="unit">Unit:</label>
+                <input type="text" id="unit" name="unit" placeholder="Alpha Squad" required><br>
+                <label for="rank">Rank:</label>
+                <input type="text" id="rank" name="rank" placeholder="Sergeant" required><br>
+                <label for="mission">Mission:</label>
+                <input type="text" id="mission" name="mission" placeholder="Reconnaissance" required>
+            </fieldset>
+
+            <!-- Health Metrics Section -->
+            <fieldset>
+                <legend>Health Metrics</legend>
+                <label for="heart-rate">Heart Rate (BPM):</label>
+                <input type="number" id="heart-rate" name="heartRate" min="30" max="200" required><br>
+                <label for="body-temperature">Body Temperature (°C):</label>
+                <input type="number" id="body-temperature" name="bodyTemperature" step="0.1" required><br>
+                <label for="oxygen-levels">Oxygen Levels (%):</label>
+                <input type="number" id="oxygen-levels" name="oxygenLevels" min="70" max="100" required><br>
+                <label for="blood-pressure">Blood Pressure:</label>
+                <input type="text" id="blood-pressure" name="bloodPressure" placeholder="120/80" required>
+            </fieldset>
+
+            <!-- Position and Status Section -->
+            <fieldset>
+                <legend>Position and Status</legend>
+                <label for="latitude">Latitude:</label>
+                <input type="number" id="latitude" name="latitude" step="0.000001" required><br>
+                <label for="longitude">Longitude:</label>
+                <input type="number" id="longitude" name="longitude" step="0.000001" required><br>
+                <label for="distress-signal">Distress Signal:</label>
+                <select id="distress-signal" name="distressSignal">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </fieldset>
+
+            <!-- Environmental Data Section -->
+            <fieldset>
+                <legend>Environmental Data</legend>
+                <label for="weather-conditions">Weather Conditions:</label>
+                <input type="text" id="weather-conditions" name="weatherConditions" placeholder="Sunny, Cloudy, etc." required><br>
+                <label for="hazard-alerts">Hazard Alerts:</label>
+                <input type="text" id="hazard-alerts" name="hazardAlerts" placeholder="None, Chemical Leak, etc." required>
+            </fieldset>
+
+            <!-- Battery/Device Status Section -->
+            <fieldset>
+                <legend>Battery/Device Status</legend>
+                <label for="device-battery">Device Battery (%):</label>
+                <input type="number" id="device-battery" name="deviceBattery" min="0" max="100" required><br>
+                <label for="connectivity-status">Connectivity Status:</label>
+                <select id="connectivity-status" name="connectivityStatus">
+                    <option value="connected">Connected</option>
+                    <option value="disconnected">Disconnected</option>
+                </select>
+            </fieldset>
+
+            <button type="submit">Send Data</button>
+            <!-- Distress Signal Button -->
+            <button type="button" id="distress-signal-btn" class="distress-button">!</button>
+        </form>
+        <p id="status-message"></p>
+
+
+        <section id="live-chat" class="dashboard-section">
+            <h2>💬 Live Chat</h2>
+            <div id="chat-window" style="height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; background: #f9f9f9;"></div>
+            <p id="typing-indicator" style="font-style: italic; color: gray; margin: 5px 0;"></p>
+            <input type="text" id="chat-input" placeholder="Type your message..." />
+            <button id="send-chat-btn">Send</button>
+            <button id="clear-chat-btn">Clear</button>
+        </section>
+        
+
+
+        <section id="sent-preview">
+            <h2>📤 Last Sent Data</h2>
+            <pre id="sent-data-box" style="background:#f0f0f0; padding:10px; border-radius:8px;"></pre>
+          </section>
+          
+
+        <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+        
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Soldier Tracking System</p>
+    </footer>
+
+    <script src="soldier-device.js"></script>
+</body>
+</html>

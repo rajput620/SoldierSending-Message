@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soldier Device</title>
+    <link rel="stylesheet" href="soldier-device.css">
+</head>
+<body>
+    <header>
+        <h1>Soldier Device Interface</h1>
+        <p>Simulate and send soldier health and position data to the server.</p>
+    </header>
+
+    <main>
+        <form id="soldier-form">
+            <fieldset>
+                <legend>Soldier Information</legend>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required><br>
+                <label for="unit">Unit:</label>
+                <input type="text" id="unit" name="unit" placeholder="Alpha Squad" required><br>
+                <label for="rank">Rank:</label>
+                <input type="text" id="rank" name="rank" placeholder="Sergeant" required><br>
+                <label for="mission">Mission:</label>
+                <input type="text" id="mission" name="mission" placeholder="Reconnaissance" required>
+            </fieldset>
+
+            <fieldset>
+                <legend>Health Metrics</legend>
+                <label for="heart-rate">Heart Rate (BPM):</label>
+                <input type="number" id="heart-rate" name="heartRate" min="30" max="200" required><br>
+                <label for="body-temperature">Body Temperature (°C):</label>
+                <input type="number" id="body-temperature" name="bodyTemperature" step="0.1" required><br>
+                <label for="oxygen-levels">Oxygen Levels (%):</label>
+                <input type="number" id="oxygen-levels" name="oxygenLevels" min="70" max="100" required><br>
+                <label for="blood-pressure">Blood Pressure:</label>
+                <input type="text" id="blood-pressure" name="bloodPressure" placeholder="120/80" required>
+            </fieldset>
+
+            <fieldset>
+                <legend>Position and Status</legend>
+                <label for="latitude">Latitude:</label>
+                <input type="number" id="latitude" name="latitude" step="0.000001" required><br>
+                <label for="longitude">Longitude:</label>
+                <input type="number" id="longitude" name="longitude" step="0.000001" required><br>
+                <label for="distress-signal">Distress Signal:</label>
+                <select id="distress-signal" name="distressSignal">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                </select>
+            </fieldset>
+
+            <button type="submit">Send Data</button>
+        </form>
+        <p id="status-message"></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Soldier Tracking System</p>
+    </footer>
+
+    <script src="soldier-device.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* General Body Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #4b5320, #8b9a74);
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-size: cover;
+  overflow: hidden;
+}
+
+/* Header */
+header {
+  background-color: #2c5c2e; /* Army green */
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  width: 100%;
+  font-size: 1.5rem;
+  border-radius: 10px 10px 0 0;
+}
+
+/* Main Content Container (Phone-Sized) */
+main {
+  width: 100%;
+  max-width: 400px;  /* Phone-sized width */
+  background-color: rgba(255, 255, 255, 0.9);  /* Slightly transparent white */
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Fieldset */
+fieldset {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+}
+
+legend {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Labels and Inputs */
+label {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+input, select {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  width: 100%;  /* Full width for inputs */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.75rem;
+  background-color: #2c5c2e; /* Army green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  width: 100%;  /* Full width for button */
+}
+
+button:hover {
+  background-color: #1e4021; /* Darker green */
+}
+
+/* Status Message */
+#status-message {
+  margin-top: 1rem;
+  font-weight: bold;
+  color: green;
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  background-color: #222;
+  color: white;
+  padding: 1rem;
+  margin-top: 2rem;
+  font-size: 1rem;
+  border-radius: 0 0 10px 10px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 500px) {
+  header {
+    font-size: 1.2rem; /* Adjust font size for smaller screens */
+  }
+
+  main {
+    padding: 1.5rem;
+  }
+
+  input, select, button {
+    font-size: 1rem; /* Adjust font size of form elements */
+  }
+
+  #status-message {
+    font-size: 1rem;
+  }
+}
+
+
+const SERVER_URL = 'http://localhost:3001/api/soldier';
+
+document.getElementById('soldier-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Gather form data
+    const data = {
+        name: document.getElementById('name').value,
+        unit: document.getElementById('unit').value,
+        rank: document.getElementById('rank').value,
+        mission: document.getElementById('mission').value,
+        heartRate: parseInt(document.getElementById('heart-rate').value, 10),
+        bodyTemperature: parseFloat(document.getElementById('body-temperature').value),
+        oxygenLevels: parseInt(document.getElementById('oxygen-levels').value, 10),
+        bloodPressure: document.getElementById('blood-pressure').value,
+        gps: {
+            lat: parseFloat(document.getElementById('latitude').value),
+            long: parseFloat(document.getElementById('longitude').value),
+        },
+        distressSignal: document.getElementById('distress-signal').value === 'true',
+    };
+
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            document.getElementById('status-message').textContent = 'Data sent successfully!';
+        } else {
+            document.getElementById('status-message').textContent = 'Failed to send data.';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('status-message').textContent = 'Error sending data.';
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const SERVER_URL = 'http://localhost:3001/api/soldier';
+
+document.getElementById('soldier-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Gather form data
+    const data = {
+        name: document.getElementById('name').value,
+        unit: document.getElementById('unit').value,
+        rank: document.getElementById('rank').value,
+        mission: document.getElementById('mission').value,
+        heartRate: parseInt(document.getElementById('heart-rate').value, 10),
+        bodyTemperature: parseFloat(document.getElementById('body-temperature').value),
+        oxygenLevels: parseInt(document.getElementById('oxygen-levels').value, 10),
+        bloodPressure: document.getElementById('blood-pressure').value,
+        gps: {
+            lat: parseFloat(document.getElementById('latitude').value),
+            long: parseFloat(document.getElementById('longitude').value),
+        },
+        distressSignal: document.getElementById('distress-signal').value === 'true',
+
+        // New fields: Environmental Data
+        environmentalData: {
+            weatherConditions: document.getElementById('weather-conditions').value,
+            hazardAlerts: document.getElementById('hazard-alerts').value,
+        },
+
+        // New fields: Battery/Device Status
+        deviceStatus: {
+            battery: parseInt(document.getElementById('device-battery').value, 10),
+            connectivity: document.getElementById('connectivity-status').value,
+        },
+    };
+
+    try {
+        const response = await fetch(SERVER_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            document.getElementById('status-message').textContent = 'Data sent successfully!';
+        } else {
+            document.getElementById('status-message').textContent = 'Failed to send data.';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('status-message').textContent = 'Error sending data.';
+    }
+});
