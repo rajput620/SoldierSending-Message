@@ -69,7 +69,7 @@ document.getElementById('distress-signal-btn').addEventListener('click', async (
 
 
 // real time chat function
-const socket = io("http://localhost:5000");
+const socket = io("https://soldiersignup.onrender.com/");
 const myId = location.href.includes("dashboard") ? "commandDashboard" : "soldierDevice";
 const otherId = myId === "commandDashboard" ? "soldierDevice" : "commandDashboard";
 
